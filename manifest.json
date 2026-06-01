@@ -3,7 +3,7 @@
   "name": "Dual Subtitle Translator",
   "version": "1.0.0",
   "description": "Translate subtitles from any language to your target language",
-  "permissions": ["storage", "scripting"],
+  "permissions": ["storage", "scripting", "tabs"],
   "host_permissions": [
     "https://www.udemy.com/*",
     "https://*.youtube.com/*",

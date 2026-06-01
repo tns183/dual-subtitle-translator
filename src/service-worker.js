@@ -17,10 +17,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     swMemCache.clear();
     chrome.storage.local.get(null, items => {
       const cacheKeys = Object.keys(items).filter(k => k.startsWith(CACHE_PREFIX));
-      if (cacheKeys.length > 0) {
-        chrome.storage.local.remove(cacheKeys, () => sendResponse({ ok: true }));
-      } else {
+      const finish = () => {
+        // Notify all tabs to reset and re-translate with current settings
+        chrome.tabs.query({}, tabs => {
+          tabs.forEach(tab => {
+            chrome.tabs.sendMessage(tab.id, { action: 'resetAndRetranslate' }).catch(() => {});
+          });
+        });
         sendResponse({ ok: true });
+      };
+      if (cacheKeys.length > 0) {
+        chrome.storage.local.remove(cacheKeys, finish);
+      } else {
+        finish();
       }
     });
     return true;

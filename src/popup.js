@@ -32,8 +32,13 @@ colorPicker.addEventListener('input', () => {
 });
 
 clearBtn.addEventListener('click', () => {
+  clearBtn.disabled = true;
+  clearBtn.textContent = 'Clearing…';
   chrome.runtime.sendMessage({ action: 'clearCache' }, () => {
     clearBtn.textContent = 'Cleared!';
-    setTimeout(() => { clearBtn.textContent = 'Clear cache'; }, 1500);
+    setTimeout(() => {
+      clearBtn.textContent = 'Clear cache';
+      clearBtn.disabled = false;
+    }, 1500);
   });
 });

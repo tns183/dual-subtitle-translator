@@ -38,6 +38,19 @@ chrome.storage.local.get(['enabled', 'targetLang', 'subtitleColor'], res => {
   if (enabled) startObserving();
 });
 
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === 'resetAndRetranslate') {
+    memCache.clear();
+    pending.clear();
+    document.querySelectorAll('[data-ust-text]').forEach(el => {
+      el.removeAttribute('data-ust-text');
+      const vi = el.querySelector('.ust-vi');
+      if (vi) vi.remove();
+    });
+    scheduleProcess();
+  }
+});
+
 chrome.storage.onChanged.addListener(changes => {
   if ('enabled' in changes) {
     enabled = changes.enabled.newValue;
