@@ -211,6 +211,7 @@ function applyTranslation(el, original, translated) {
   const existing = el.querySelector('.ust-vi');
   if (existing) {
     if (existing.textContent !== translated) existing.textContent = translated;
+    existing.style.color = subtitleColor;
   } else {
     const viLine = document.createElement('span');
     viLine.className = 'ust-vi';
