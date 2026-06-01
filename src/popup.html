@@ -99,6 +99,16 @@
     button:hover {
       background: #444;
     }
+
+    input[type="color"] {
+      width: 36px;
+      height: 28px;
+      border: 1px solid #555;
+      border-radius: 6px;
+      background: #333;
+      cursor: pointer;
+      padding: 2px;
+    }
   </style>
 </head>
 
@@ -123,6 +133,10 @@
       <option value="es">Spanish</option>
       <option value="de">German</option>
     </select>
+  </div>
+  <div class="row">
+    <label>Subtitle color</label>
+    <input type="color" id="colorPicker" value="#ffd54f" />
   </div>
   <button id="clearCache">Clear cache</button>
   <script src="popup.js"></script>
