@@ -24,15 +24,17 @@ const pending = new Set();
 
 let enabled = true;
 let targetLang = 'vi';
+let subtitleColor = '#ffd54f';
 let subtitleObserver = null;  // watches subtitle container
 let mountObserver = null;     // watches body for container to appear
 let rafHandle = null;
 let isApplying = false;
 let observedContainer = null;
 
-chrome.storage.local.get(['enabled', 'targetLang'], res => {
+chrome.storage.local.get(['enabled', 'targetLang', 'subtitleColor'], res => {
   enabled = res.enabled !== false;
   targetLang = res.targetLang || 'vi';
+  subtitleColor = res.subtitleColor || '#ffd54f';
   if (enabled) startObserving();
 });
 
@@ -52,6 +54,12 @@ chrome.storage.onChanged.addListener(changes => {
       if (vi) vi.remove();
     });
     scheduleProcess();
+  }
+  if ('subtitleColor' in changes) {
+    subtitleColor = changes.subtitleColor.newValue || '#ffd54f';
+    document.querySelectorAll('.ust-vi').forEach(el => {
+      el.style.color = subtitleColor;
+    });
   }
 });
 
@@ -207,7 +215,7 @@ function applyTranslation(el, original, translated) {
     const viLine = document.createElement('span');
     viLine.className = 'ust-vi';
     viLine.textContent = translated;
-    viLine.style.cssText = 'display:block;color:#ffd54f;font-size:0.95em;margin-top:2px;';
+    viLine.style.cssText = `display:block;color:${subtitleColor};font-size:0.95em;margin-top:2px;`;
     el.appendChild(viLine);
   }
   el.dataset.ustText = targetLang + ':' + original;
