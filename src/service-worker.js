@@ -15,7 +15,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.action === 'clearCache') {
     swMemCache.clear();
-    chrome.storage.local.clear(() => sendResponse({ ok: true }));
+    chrome.storage.local.get(null, items => {
+      const cacheKeys = Object.keys(items).filter(k => k.startsWith(CACHE_PREFIX));
+      if (cacheKeys.length > 0) {
+        chrome.storage.local.remove(cacheKeys, () => sendResponse({ ok: true }));
+      } else {
+        sendResponse({ ok: true });
+      }
+    });
     return true;
   }
 });
